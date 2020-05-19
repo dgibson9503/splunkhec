@@ -1,0 +1,20 @@
+module(load="imudp")
+
+input(type="imudp" port="514" ruleset="default_file")
+
+module(load="imtcp" )
+input(type="imtcp" port="514" ruleset="default_file")
+
+module(load="imptcp")
+input(type="imptcp" port="1514" ruleset="default_file")
+
+module(load="omprog")
+
+ruleset(name="default_file"){
+    $RulesetCreateMainQueue    
+    action(type="omprog"
+       binary="/opt/rsyslog/omsplunkhec.py DAA61EE1-F8B2-4DB1-9159-6D7AA5220B21 192.168.100.70 --source=rsyslog:hec --sourcetype=syslog --index=main --maxThreads=4" 
+       template="RSYSLOG_TraditionalFileFormat")
+    stop
+}
+
